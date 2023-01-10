@@ -11,7 +11,7 @@ usage() {
 	echo "Usage: $0 [-h] FILE [START] [END]"
 	echo ""
 	echo "Grab line(s) START (to END, if provided) from FILE and store in"
-    echo "clipboard."
+  echo "clipboard."
 }
 
 
@@ -24,7 +24,7 @@ fi
 
 
 FILE_NAME=$1
-
+# File existence check
 if [ -f ${FILE_NAME} ]; then
 	FILE_PATH=$FILE_NAME
 elif [ -f ${PWD}/${FILE_NAME} ]; then
@@ -51,6 +51,6 @@ fi
 # echo "File contents:"
 # echo "$contents"
 
-# Pasting to Windows clipboard though clip.exe
+# Pasting to Windows clipboard through clip.exe
 echo $contents | clip.exe
 exit 0
