@@ -75,11 +75,11 @@ for new_file in "${all_files[@]}"; do
   fi
 done
 echo ""
-echo "${#all_files[@]}"
+printf "Total files:    %s\n" "${#all_files[@]}"
 
-printf "Checked files\n"
-printf "%s\n" "${checked_files[@]}"
+printf "Unique files:   %s\n" "${#checked_files[@]}"
+# printf "%s\n" "${checked_files[@]}"
 
 
-printf "\nRepeated files\n"
+printf "Repeated files: %s\n" "${#repeated_files[@]}"
 printf "%s\n" "${repeated_files[@]}"
