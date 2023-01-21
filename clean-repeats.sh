@@ -1,4 +1,14 @@
 #!/usr/bin/bash
+# 
+# Script for removing repeated files from system.
+# 
+# Author: Akhmed Al-Sayed
+# License: MIT
+
+
+GREEN='\e[32m'
+  RED='\e[31m'
+  END='\e[0m'
 
 
 areSame () {
@@ -7,6 +17,7 @@ areSame () {
 
   check=`cmp -s "$file_a" "$file_b" && "$file_a" -ne "$file_b" && echo "same" || echo "different"`
 
+  
   if [[ $check == "same" ]]; then
     return 0
   else 
@@ -19,6 +30,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
+# Remove '/' from the end of the path, if present
 start_path=`echo ${1%/}`
 
 
@@ -35,28 +47,35 @@ repeated_files=()
 for entry in "$start_path"/*; do
   if [ -f "$entry" ]; then
     all_files+=("$entry")
+    # echo "$entry"
   fi
 done
 
 
-# printf "%s\n" "${all_files[@]}"
-# echo ""
+printf "%s\n" "${all_files[@]}"
+echo ""
 
-for new_file in "$all_files"; do
-  for checked_file in "$checked_files[@]"; do
-    if areSame "$new_file" "$checked_file"; then
+
+for new_file in "${all_files[@]}"; do
+  echo "Testing '$new_file'"
+  for checked_file in "${checked_files[@]}"; do
+    areSame "$new_file" "$checked_file"
+    if [[ $? -eq 0 ]]; then
       repeated_files+=("$new_file")
-      echo "Repeated: $new_file (of $checked_file)"
+      echo -e "${RED}${new_file}${END} (same as $checked_file)"
       break 1
     fi
+    false
   done
-  
-  if [[ "${#repeated_files[@]}" -eq "0" ]] || [[ "$new_file" -ne "${repeated_files[-1]}" ]]; then
+
+  if [[ $? -eq 1 || ${#checked_files[@]} -eq 0 ]]; then
+  # if [[ "${#repeated_files[@]}" -eq "0" ]] || [[ "$new_file" -ne "${repeated_files[-1]}" ]]; then
+    echo -e "${GREEN}$new_file${END}"
     checked_files+=("$new_file")
   fi
-
-  checked_files+=("$new_file")
 done
+echo ""
+echo "${#all_files[@]}"
 
 printf "Checked files\n"
 printf "%s\n" "${checked_files[@]}"
