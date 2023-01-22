@@ -51,8 +51,12 @@ RED='\e[31m'
 END='\e[0m'
 
 
-# Default depth history search
-DEPTH=5
+# Depth history search (default: 5)
+if [[ "$1" != "" ]] && [[ ! $1 =~ "[0-9]+$" ]]; then
+  DEPTH=$(("$1"))
+else
+  DEPTH=5
+fi
 
 
 files_changed=()
